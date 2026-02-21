@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.pomodorotimer.ui.screen.TimerScreen
-import com.example.pomodorotimer.ui.screen.HistoryScreen
-import com.example.pomodorotimer.ui.screen.SettingsScreen
+import com.example.pomodorotimer.ui.timer.TimerScreen
+import com.example.pomodorotimer.ui.history.HistoryScreen
+import com.example.pomodorotimer.ui.settings.SettingsScreen
 
 sealed class Screen(val route: String) {
     object Timer : Screen("timer")

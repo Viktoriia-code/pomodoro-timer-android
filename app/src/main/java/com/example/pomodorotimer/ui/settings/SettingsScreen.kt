@@ -1,4 +1,4 @@
-package com.example.pomodorotimer.ui.screen
+package com.example.pomodorotimer.ui.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HistoryScreen(onBack: () -> Unit) {
+fun SettingsScreen(onBack: () -> Unit) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = "History Screen")
+        Text(text = "Settings Screen")
         Button(onClick = onBack) {
             Text("Back")
         }

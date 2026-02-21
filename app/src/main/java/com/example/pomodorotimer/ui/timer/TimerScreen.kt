@@ -1,4 +1,4 @@
-package com.example.pomodorotimer.ui.screen
+package com.example.pomodorotimer.ui.timer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -55,6 +55,17 @@ fun TimerCircle() {
     Box(
         contentAlignment = Alignment.Center
     ) {
+        // Earth image
+        Image(
+            painter = painterResource(id = R.drawable.earth),
+            contentDescription = null,
+            modifier = Modifier
+                .size(350.dp)
+                .clip(CircleShape)
+                .padding(top = 36.dp),
+            contentScale = ContentScale.Crop,
+            alpha = 0.8F
+        )
 
         // Progress circle
         CircularProgressIndicator(
@@ -63,16 +74,6 @@ fun TimerCircle() {
             strokeWidth = 8.dp,
             color = Color(0xFF6EDCFF),
             trackColor = Color.DarkGray
-        )
-
-        // Earth image
-        Image(
-            painter = painterResource(id = R.drawable.earth),
-            contentDescription = null,
-            modifier = Modifier
-                .size(350.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
         )
 
         Column(
