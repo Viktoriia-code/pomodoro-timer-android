@@ -7,6 +7,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.SharingStarted
 
 class TimerViewModel : ViewModel() {
 
@@ -19,6 +22,17 @@ class TimerViewModel : ViewModel() {
     val isRunning: StateFlow<Boolean> = _isRunning
 
     private var timerJob: Job? = null
+
+    val progress: StateFlow<Float> =
+        _timeLeft.map {
+
+            it.toFloat() / focusDuration.toFloat()
+
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            1f
+        )
 
 
     fun startPauseTimer() {
