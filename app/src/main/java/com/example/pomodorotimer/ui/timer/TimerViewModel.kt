@@ -1,4 +1,77 @@
 package com.example.pomodorotimer.ui.timer
 
-class TimerViewModel {
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+class TimerViewModel : ViewModel() {
+
+    private val focusDuration = 25 * 60L // 25 minutes in seconds
+
+    private val _timeLeft = MutableStateFlow(focusDuration)
+    val timeLeft: StateFlow<Long> = _timeLeft
+
+    private val _isRunning = MutableStateFlow(false)
+    val isRunning: StateFlow<Boolean> = _isRunning
+
+    private var timerJob: Job? = null
+
+
+    fun startPauseTimer() {
+
+        if (_isRunning.value) {
+            pauseTimer()
+        } else {
+            startTimer()
+        }
+    }
+
+
+    private fun startTimer() {
+
+        _isRunning.value = true
+
+        timerJob = viewModelScope.launch {
+
+            while (_timeLeft.value > 0) {
+
+                delay(1000)
+
+                _timeLeft.value -= 1
+            }
+
+            _isRunning.value = false
+        }
+    }
+
+
+    private fun pauseTimer() {
+
+        timerJob?.cancel()
+
+        _isRunning.value = false
+    }
+
+
+    fun resetTimer() {
+
+        timerJob?.cancel()
+
+        _timeLeft.value = focusDuration
+
+        _isRunning.value = false
+    }
+
+
+    fun formatTime(seconds: Long): String {
+
+        val minutes = seconds / 60
+        val sec = seconds % 60
+
+        return "%02d:%02d".format(minutes, sec)
+    }
 }

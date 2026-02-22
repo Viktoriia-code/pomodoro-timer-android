@@ -17,9 +17,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pomodorotimer.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
 
 @Composable
-fun TimerScreen(onNavigateToSettings: () -> Unit, onNavigateToHistory: () -> Unit) {
+fun TimerScreen(
+    onNavigateToSettings: () -> Unit,
+    onNavigateToHistory: () -> Unit,
+    viewModel: TimerViewModel = viewModel()
+    ) {
+    val timeLeft = viewModel.timeLeft.collectAsState()
+    val isRunning = viewModel.isRunning.collectAsState()
 
     Box(
         modifier = Modifier
@@ -40,18 +48,23 @@ fun TimerScreen(onNavigateToSettings: () -> Unit, onNavigateToHistory: () -> Uni
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            TimerCircle()
+            TimerCircle(
+                time = viewModel.formatTime(timeLeft.value)
+            )
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            PlayPauseButton()
+            PlayPauseButton(
+                isRunning = isRunning.value,
+                onClick = { viewModel.startPauseTimer() }
+            )
 
         }
     }
 }
 
 @Composable
-fun TimerCircle() {
+fun TimerCircle(time: String) {
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -81,8 +94,8 @@ fun TimerCircle() {
         ) {
 
             Text(
-                text = "25:00",
-                fontSize = 48.sp,
+                text = time,
+                fontSize = 64.sp,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )
@@ -96,10 +109,13 @@ fun TimerCircle() {
 }
 
 @Composable
-fun PlayPauseButton() {
+fun PlayPauseButton(
+    isRunning: Boolean,
+    onClick: () -> Unit
+) {
 
     Button(
-        onClick = {},
+        onClick = onClick,
         modifier = Modifier.size(80.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
@@ -108,7 +124,7 @@ fun PlayPauseButton() {
     ) {
 
         Text(
-            "▶",
+            if (isRunning) "⏸" else "▶",
             fontSize = 28.sp,
             color = Color.Black
         )
