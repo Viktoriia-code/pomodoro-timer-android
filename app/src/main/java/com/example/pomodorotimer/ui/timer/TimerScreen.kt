@@ -31,8 +31,10 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FastForward
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.Refresh
 
 @Composable
 fun TimerScreen(
@@ -77,11 +79,12 @@ fun TimerScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            PlayPauseButton(
+            Controls(
                 isRunning = isRunning.value,
-                onClick = { viewModel.startPauseTimer() }
+                onPlayPauseClick = { viewModel.startPauseTimer() },
+                onResetClick = { viewModel.resetTimer() },
+                onFinishSessionClick = { viewModel.finishSession() }
             )
-
         }
     }
 }
@@ -229,31 +232,74 @@ fun TimerCircle(
 }
 
 @Composable
-fun PlayPauseButton(
+fun Controls(
     isRunning: Boolean,
-    onClick: () -> Unit
+    onPlayPauseClick: () -> Unit,
+    onResetClick: () -> Unit,
+    onFinishSessionClick: () -> Unit
 ) {
 
-    Button(
-        onClick = onClick,
-        modifier = Modifier.size(80.dp),
-        shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF6EDCFF)
-        )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        Icon(
-            imageVector =
-                if (isRunning)
-                    Icons.Filled.Pause
-                else
-                    Icons.Filled.PlayArrow,
+        Button(
+            onClick = onResetClick,
+            modifier = Modifier.size(56.dp),
+            contentPadding = PaddingValues(0.dp),
+            shape = CircleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFB0BEC5)
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Refresh,
+                contentDescription = "Reset",
+                tint = Color.White,
+                modifier = Modifier.size(30.dp)
+            )
+        }
 
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier.size(34.dp)
-        )
+        Button(
+            onClick = onPlayPauseClick,
+            modifier = Modifier.size(80.dp),
+            shape = CircleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF0288D1)
+            )
+        ) {
+
+            Icon(
+                imageVector =
+                    if (isRunning)
+                        Icons.Filled.Pause
+                    else
+                        Icons.Filled.PlayArrow,
+
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(34.dp)
+            )
+        }
+
+        // Finish session button
+        Button(
+            onClick = onFinishSessionClick,
+            modifier = Modifier.size(56.dp),
+            shape = CircleShape,
+            contentPadding = PaddingValues(0.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFB0BEC5)
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Filled.FastForward,
+                contentDescription = "Finish session",
+                tint = Color.White,
+                modifier = Modifier.size(30.dp)
+            )
+        }
     }
 }
 

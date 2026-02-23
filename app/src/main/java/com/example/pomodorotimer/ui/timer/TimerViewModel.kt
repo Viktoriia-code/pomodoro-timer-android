@@ -80,6 +80,15 @@ class TimerViewModel : ViewModel() {
         _isRunning.value = false
     }
 
+    fun finishSession() {
+
+        timerJob?.cancel()
+        timerJob = null
+
+        _isRunning.value = false
+
+        _timeLeft.value = 0L
+    }
 
     fun formatTime(seconds: Long): String {
 
