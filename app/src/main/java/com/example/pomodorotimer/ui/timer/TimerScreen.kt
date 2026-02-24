@@ -35,56 +35,97 @@ import androidx.compose.material.icons.filled.FastForward
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.History
 
+@ExperimentalMaterial3Api
 @Composable
 fun TimerScreen(
     onNavigateToSettings: () -> Unit,
     onNavigateToHistory: () -> Unit,
     viewModel: TimerViewModel = viewModel()
-    ) {
+) {
+
     val timeLeft = viewModel.timeLeft.collectAsState()
     val isRunning = viewModel.isRunning.collectAsState()
     val progress by viewModel.progress.collectAsState()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        contentAlignment = Alignment.Center
-    ) {
+    Scaffold(
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+        topBar = {
+
+            TopAppBar(
+
+                title = {
+                    Text("Pomodoro Timer")
+                },
+
+                actions = {
+
+                    IconButton(
+                        onClick = onNavigateToHistory
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = "History"
+                        )
+                    }
+
+                    IconButton(
+                        onClick = onNavigateToSettings
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings"
+                        )
+                    }
+                }
+            )
+        }
+
+    ) { padding ->
+
+        Box(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center
         ) {
 
-            Text(
-                text = "FOCUS",
-                color = Color(0xFF6EDCFF),
-                fontSize = 18.sp
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            Text(
-                text = "Stay focused on your task",
-                color = Color(0xFF6EDCFF),
-                fontSize = 16.sp
-            )
+                Text(
+                    text = "FOCUS",
+                    color = Color(0xFF6EDCFF),
+                    fontSize = 18.sp
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "Stay focused on your task",
+                    color = Color(0xFF6EDCFF),
+                    fontSize = 16.sp
+                )
 
-            TimerCircle(
-                time = viewModel.formatTime(timeLeft.value),
-                isRunning = isRunning.value,
-                progress = progress
-            )
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Spacer(modifier = Modifier.height(40.dp))
+                TimerCircle(
+                    time = viewModel.formatTime(timeLeft.value),
+                    isRunning = isRunning.value,
+                    progress = progress
+                )
 
-            Controls(
-                isRunning = isRunning.value,
-                onPlayPauseClick = { viewModel.startPauseTimer() },
-                onResetClick = { viewModel.resetTimer() },
-                onFinishSessionClick = { viewModel.finishSession() }
-            )
+                Spacer(modifier = Modifier.height(40.dp))
+
+                Controls(
+                    isRunning = isRunning.value,
+                    onPlayPauseClick = { viewModel.startPauseTimer() },
+                    onResetClick = { viewModel.resetTimer() },
+                    onFinishSessionClick = { viewModel.finishSession() }
+                )
+            }
         }
     }
 }
@@ -303,6 +344,7 @@ fun Controls(
     }
 }
 
+@ExperimentalMaterial3Api
 @Preview(showBackground = true)
 @Composable
 fun TimerScreenPreview() {
