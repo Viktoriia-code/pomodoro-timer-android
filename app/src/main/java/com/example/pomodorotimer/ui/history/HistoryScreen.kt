@@ -28,6 +28,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.pomodorotimer.data.local.SessionEntity
+import com.example.pomodorotimer.utils.toTimeString
+import com.example.pomodorotimer.utils.toFullDateString
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -38,7 +40,7 @@ fun HistoryScreen(
     onBack: () -> Unit,
     viewModel: HistoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    val sessions by viewModel.sessions.collectAsState()
+    val groupedSessions by viewModel.groupedSessions.collectAsState()
 
     Scaffold(
         topBar = {
@@ -58,7 +60,7 @@ fun HistoryScreen(
             )
         }
     ) { padding ->
-        if (sessions.isEmpty()) {
+        if (groupedSessions.isEmpty()) {
 
             Box(
                 modifier = Modifier
@@ -78,9 +80,20 @@ fun HistoryScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                items(sessions) { session ->
+                groupedSessions.forEach { (date, sessions) ->
 
-                    SessionItem(session)
+                    item {
+
+                        Text(
+                            text = date.toFullDateString(),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+
+                    items(sessions) { session ->
+
+                        SessionItem(session)
+                    }
                 }
             }
         }
@@ -99,18 +112,14 @@ fun SessionItem(session: SessionEntity) {
         ) {
 
             Text(
-                text = "Focus Session",
+                text = "Focus Session (${session.durationMinutes} min)",
                 style = MaterialTheme.typography.titleMedium
             )
 
             Spacer(Modifier.height(6.dp))
 
             Text(
-                text = "Duration: ${session.durationMinutes} min"
-            )
-
-            Text(
-                text = "Started at: ${formatDate(session.startedAt)}"
+                text = "Started at: ${session.startedAt.toTimeString()}"
             )
 
             if (session.completedAt != null) {
