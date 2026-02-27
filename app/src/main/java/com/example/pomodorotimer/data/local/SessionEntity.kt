@@ -11,5 +11,7 @@ data class SessionEntity(
 
     val durationMinutes: Int,
 
-    val completedAt: Long   // timestamp
+    val startedAt: Long = System.currentTimeMillis(),
+
+    val completedAt: Long? = null // timestamp
 )

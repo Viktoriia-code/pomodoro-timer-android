@@ -16,4 +16,7 @@ interface SessionDao {
 
     @Query("DELETE FROM sessions")
     suspend fun clearAll()
+
+    @Query("UPDATE sessions SET completedAt = :completedAt WHERE id = :sessionId")
+    suspend fun completeSession(sessionId: Long, completedAt: Long)
 }

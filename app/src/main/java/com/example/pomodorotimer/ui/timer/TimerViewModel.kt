@@ -10,10 +10,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.SharingStarted
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.example.pomodorotimer.data.local.DatabaseProvider
+import com.example.pomodorotimer.data.local.SessionEntity
 
-class TimerViewModel : ViewModel() {
+class TimerViewModel(application: Application) : AndroidViewModel(application) {
+    private val dao = DatabaseProvider
+        .getDatabase(application)
+        .sessionDao()
 
-    private val focusDuration = 25 * 60L // 25 minutes in seconds
+    private val sessionDuration = 25
+    private val focusDuration = sessionDuration * 60L // 25 minutes in seconds
 
     private val _timeLeft = MutableStateFlow(focusDuration)
     val timeLeft: StateFlow<Long> = _timeLeft
@@ -46,6 +54,13 @@ class TimerViewModel : ViewModel() {
 
 
     private fun startTimer() {
+        if (_timeLeft.value == focusDuration) {
+            viewModelScope.launch {
+                dao.insertSession(
+                    SessionEntity(durationMinutes = sessionDuration)
+                )
+            }
+        }
 
         _isRunning.value = true
 
