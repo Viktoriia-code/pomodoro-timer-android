@@ -1,6 +1,5 @@
 package com.example.pomodorotimer.ui.history
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,11 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pomodorotimer.data.local.SessionEntity
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -39,7 +34,10 @@ import java.util.Locale
 
 @ExperimentalMaterial3Api
 @Composable
-fun HistoryScreen(onBack: () -> Unit, viewModel: HistoryViewModel = viewModel()) {
+fun HistoryScreen(
+    onBack: () -> Unit,
+    viewModel: HistoryViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
     val sessions by viewModel.sessions.collectAsState()
 
     Scaffold(
@@ -133,11 +131,4 @@ fun formatDate(timestamp: Long): String {
         )
 
     return formatter.format(Date(timestamp))
-}
-
-@ExperimentalMaterial3Api
-@Preview(showBackground = true)
-@Composable
-fun HistoryScreenPreview() {
-    HistoryScreen(onBack = {})
 }
