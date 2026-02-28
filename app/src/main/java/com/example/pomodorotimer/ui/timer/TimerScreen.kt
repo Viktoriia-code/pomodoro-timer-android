@@ -99,13 +99,13 @@ fun TimerScreen(
 
                 Text(
                     text = "FOCUS",
-                    color = Color(0xFF6EDCFF),
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 18.sp
                 )
 
                 Text(
                     text = "Stay focused on your task",
-                    color = Color(0xFF6EDCFF),
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 16.sp
                 )
 
