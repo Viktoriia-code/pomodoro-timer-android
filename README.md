@@ -27,6 +27,7 @@ This app provides a clean timer experience inspired by the Pomodoro technique. U
 - MVVM architecture
 - Kotlin Coroutines and Flow
 - Room Database
+- DataStore Preferences
 
 ## Installation
 
