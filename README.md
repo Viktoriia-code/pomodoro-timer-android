@@ -17,6 +17,7 @@ This app provides a clean timer experience inspired by the Pomodoro technique. U
 5. Settings and navigation support
 6. Persistent storage using Room Database
 7. Reactive UI powered by StateFlow
+8. Theme selection with persistent dark/light mode using DataStore
 
 ## Tech Stack
 
