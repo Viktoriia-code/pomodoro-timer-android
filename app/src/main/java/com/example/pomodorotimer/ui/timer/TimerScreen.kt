@@ -51,32 +51,27 @@ fun TimerScreen(
     val progress by viewModel.progress.collectAsState()
 
     Scaffold(
-
         topBar = {
-
             TopAppBar(
-
-                title = {
-                    Text("Pomodoro Timer")
-                },
-
+                title = { Text("Pomodoro Timer") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                ),
                 actions = {
-
-                    IconButton(
-                        onClick = onNavigateToHistory
-                    ) {
+                    IconButton(onClick = onNavigateToHistory) {
                         Icon(
                             imageVector = Icons.Default.History,
-                            contentDescription = "History"
+                            contentDescription = "History",
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
 
-                    IconButton(
-                        onClick = onNavigateToSettings
-                    ) {
+                    IconButton(onClick = onNavigateToSettings) {
                         Icon(
                             imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings"
+                            contentDescription = "Settings",
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
