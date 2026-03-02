@@ -1,6 +1,5 @@
 package com.example.pomodorotimer.ui.timer
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -31,6 +30,8 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
 
     private var timerJob: Job? = null
 
+    private var currentSessionId: Long? = null
+
     val progress: StateFlow<Float> =
         _timeLeft.map {
 
@@ -56,7 +57,7 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
     private fun startTimer() {
         if (_timeLeft.value == focusDuration) {
             viewModelScope.launch {
-                dao.insertSession(
+                currentSessionId = dao.insertSession(
                     SessionEntity(durationMinutes = sessionDuration)
                 )
             }
@@ -93,16 +94,29 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
         _timeLeft.value = focusDuration
 
         _isRunning.value = false
+
+        currentSessionId = null
     }
 
     fun finishSession() {
-
         timerJob?.cancel()
         timerJob = null
 
         _isRunning.value = false
 
         _timeLeft.value = 0L
+
+        val id = currentSessionId ?: return
+
+        viewModelScope.launch {
+
+            dao.completeSession(
+                id,
+                System.currentTimeMillis()
+            )
+        }
+
+        currentSessionId = null
     }
 
     fun formatTime(seconds: Long): String {

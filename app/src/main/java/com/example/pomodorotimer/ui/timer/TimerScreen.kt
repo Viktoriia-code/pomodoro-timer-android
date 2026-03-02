@@ -87,20 +87,19 @@ fun TimerScreen(
                 .background(MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
         ) {
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Text(
                     text = "FOCUS",
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 18.sp
                 )
 
                 Text(
                     text = "Stay focused on your task",
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 16.sp
                 )
 
@@ -302,7 +301,7 @@ fun Controls(
             modifier = Modifier.size(80.dp),
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0288D1)
+                containerColor = MaterialTheme.colorScheme.primaryContainer
             )
         ) {
 
@@ -314,7 +313,7 @@ fun Controls(
                         Icons.Filled.PlayArrow,
 
                 contentDescription = null,
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(34.dp)
             )
         }

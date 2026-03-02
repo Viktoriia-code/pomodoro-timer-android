@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface SessionDao {
 
     @Insert
-    suspend fun insertSession(session: SessionEntity)
+    suspend fun insertSession(session: SessionEntity): Long
 
     @Query("SELECT * FROM sessions ORDER BY completedAt DESC")
     fun getAllSessions(): Flow<List<SessionEntity>>
