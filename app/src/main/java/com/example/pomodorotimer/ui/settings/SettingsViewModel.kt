@@ -21,9 +21,18 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             true // default dark theme
         )
 
+    val sessionDuration: StateFlow<Int> = ThemePreferences.getSessionDuration(context)
+        .stateIn(viewModelScope, SharingStarted.Lazily, 25)
+
     fun toggleTheme(dark: Boolean) {
         viewModelScope.launch {
             ThemePreferences.saveDarkTheme(context, dark)
+        }
+    }
+
+    fun updateSessionDuration(minutes: Int) {
+        viewModelScope.launch {
+            ThemePreferences.saveSessionDuration(context, minutes)
         }
     }
 }

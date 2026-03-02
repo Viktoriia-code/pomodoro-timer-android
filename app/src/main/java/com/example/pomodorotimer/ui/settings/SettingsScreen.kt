@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,6 +39,7 @@ fun SettingsScreen(
     onBack: () -> Unit
     ) {
     val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState(initial = true)
+    val sessionDuration by settingsViewModel.sessionDuration.collectAsState(initial = 25)
 
     Scaffold(
         topBar = {
@@ -84,6 +88,24 @@ fun SettingsScreen(
                         checked = isDarkTheme,
                         onCheckedChange = { settingsViewModel.toggleTheme(it) }
                     )
+                }
+
+                Spacer(Modifier.height(24.dp))
+
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Text("Session Duration")
+                    Spacer(Modifier.weight(1f))
+                    IconButton(onClick = {
+                        if (sessionDuration > 1) settingsViewModel.updateSessionDuration(sessionDuration - 1)
+                    }) {
+                        Icon(Icons.Default.Remove, contentDescription = "Decrease")
+                    }
+                    Text("${sessionDuration} min")
+                    IconButton(onClick = {
+                        settingsViewModel.updateSessionDuration(sessionDuration + 1)
+                    }) {
+                        Icon(Icons.Default.Add, contentDescription = "Increase")
+                    }
                 }
             }
         }

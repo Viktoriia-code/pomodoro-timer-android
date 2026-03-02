@@ -49,6 +49,7 @@ fun TimerScreen(
     val timeLeft = viewModel.timeLeft.collectAsState()
     val isRunning = viewModel.isRunning.collectAsState()
     val progress by viewModel.progress.collectAsState()
+    val sessionDuration by viewModel.sessionDuration.collectAsState()
 
     Scaffold(
         topBar = {
@@ -108,7 +109,8 @@ fun TimerScreen(
                 TimerCircle(
                     time = viewModel.formatTime(timeLeft.value),
                     isRunning = isRunning.value,
-                    progress = progress
+                    progress = progress,
+                    sessionDuration = sessionDuration
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
@@ -128,7 +130,8 @@ fun TimerScreen(
 fun TimerCircle(
     time: String,
     isRunning: Boolean,
-    progress: Float
+    progress: Float,
+    sessionDuration: Int
 ) {
 
     val animatedProgress by animateFloatAsState(
@@ -256,6 +259,11 @@ fun TimerCircle(
                         blurRadius = 30f           // spread of the shadow
                     )
                 )
+            )
+
+            Text(
+                text = "Session: $sessionDuration min",
+                color = Color(0xFFB0BEC5)
             )
 
             Text(
