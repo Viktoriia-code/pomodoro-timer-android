@@ -13,22 +13,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import com.example.pomodorotimer.data.local.SessionEntity
 import com.example.pomodorotimer.utils.toTimeString
 import com.example.pomodorotimer.utils.toFullDateString
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
 @Composable
@@ -97,7 +107,10 @@ fun HistoryScreen(
                     }
 
                     items(sessions) { session ->
-                        SessionItem(session)
+                        SessionItem(
+                            session = session,
+                            onDeleteConfirmed = { viewModel.deleteSession(session) }
+                        )
                     }
 
                     item {
@@ -109,10 +122,20 @@ fun HistoryScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SessionItem(session: SessionEntity) {
+fun SessionItem(
+    session: SessionEntity,
+    onDeleteConfirmed: () -> Unit
+) {
+    var showSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { showSheet = true }
     ) {
         val isCompleted = session.completedAt != null
 
@@ -153,6 +176,65 @@ fun SessionItem(session: SessionEntity) {
                         text = "Completed at: ${completedAt.toTimeString()}"
                     )
                 }
+            }
+        }
+    }
+
+    if (showSheet) {
+
+        ModalBottomSheet(
+            onDismissRequest = { showSheet = false },
+            sheetState = sheetState
+        ) {
+
+            val isCompleted = session.completedAt != null
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                Text(
+                    text = "Session details",
+                    style = MaterialTheme.typography.titleLarge
+                )
+
+                Text("Duration: ${session.durationMinutes} min")
+                Text("Started at: ${session.startedAt.toTimeString()}")
+
+                session.completedAt?.let {
+                    Text("Completed at: ${it.toTimeString()}")
+                }
+
+                Text(
+                    text = if (isCompleted)
+                        "Status: Completed"
+                    else
+                        "Status: Not completed"
+                )
+
+                Spacer(Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        scope.launch {
+                            sheetState.hide()
+                            showSheet = false
+                            onDeleteConfirmed()
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Delete")
+                }
+
+                Spacer(Modifier.height(12.dp))
             }
         }
     }

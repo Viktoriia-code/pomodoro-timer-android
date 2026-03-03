@@ -4,9 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pomodorotimer.data.local.DatabaseProvider
+import com.example.pomodorotimer.data.local.SessionEntity
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
 
@@ -23,8 +25,16 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
             emptyList()
         )
 
-    suspend fun clearHistory() {
-        dao.clearAll()
+    fun clearHistory() {
+        viewModelScope.launch {
+            dao.clearAll()
+        }
+    }
+
+    fun deleteSession(session: SessionEntity) {
+        viewModelScope.launch {
+            dao.deleteSession(session)
+        }
     }
 
     val groupedSessions =
