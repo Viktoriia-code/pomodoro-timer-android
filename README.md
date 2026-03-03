@@ -1,4 +1,12 @@
-# Pomodoro Timer Android App
+<h1 align="center">Pomodoro Timer Android App</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Kotlin-2.0.21-green.svg" />
+  <img src="https://img.shields.io/badge/Compose-1.12.4-green.svg" />
+  <img src="https://img.shields.io/badge/minSdk-24-blue.svg" />
+  <img src="https://img.shields.io/badge/targetSdk-36-blue.svg" />
+  <img src="https://img.shields.io/badge/Architecture-MVVM-purple.svg" />
+</p>
 
 A simple focus timer built with `Kotlin`, `Jetpack Compose`, and `MVVM architecture`.
 
