@@ -52,3 +52,10 @@ git clone https://github.com/Viktoriia-code/pomodoro-timer-android.git
 
 1. Android Studio Hedgehog or newer
 2. Android SDK 24 or higher
+
+## Future Improvements
+
+- [ ] Add break sessions
+- [ ] Add statistics screen
+- [ ] Add notifications
+- [ ] Add sound effects
